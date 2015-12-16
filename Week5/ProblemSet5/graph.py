@@ -136,7 +136,6 @@ class WeightedDigraph(Digraph):
                 return d[1][0], d[1][1]
 
 
-
 def printPath(path):
     # a path is a list of nodes
     result = ''
