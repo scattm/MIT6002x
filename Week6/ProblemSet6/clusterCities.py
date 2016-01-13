@@ -1,6 +1,7 @@
 # Code shared across examples
-import numpy
+from matplotlib import pylab
 import string
+import random
 
 
 def stdDev(X):
@@ -13,7 +14,7 @@ def stdDev(X):
 
 def scaleFeatures(vals):
     """Assumes vals is a sequence of numbers"""
-    result = numpy.array(vals)
+    result = pylab.array(vals)
     mean = sum(result) / float(len(result))
     result -= mean
     sd = stdDev(result)
@@ -92,6 +93,23 @@ class Cluster(object):
             for po in other.members():
                 distances.append(p.distance(po))
         return sum(distances)/len(distances)
+
+    def mysteryLinkageDist(self, other):
+        av_dist = self.averageLinkageDist(other)
+        max_dist = self.maxLinkageDist(other)
+        min_dist = self.singleLinkageDist(other)
+        retDist = 0.0
+        if av_dist == max_dist and max_dist == min_dist:
+            retDist = av_dist
+        elif av_dist == max_dist:
+            retDist = av_dist
+        elif av_dist == min_dist:
+            retDist = av_dist
+        elif max_dist == min_dist:
+            retDist = min_dist
+        else:
+            retDist = random.choice([av_dist,min_dist,max_dist])
+        return retDist
 
     def members(self):
         for p in self.points:
@@ -251,7 +269,7 @@ def buildCityPoints(fName, scaling):
     cityNames, featureList = readCityData(fName, scaling)
     points = []
     for i in range(len(cityNames)):
-        point = City(cityNames[i], numpy.array(featureList[i]))
+        point = City(cityNames[i], pylab.array(featureList[i]))
         points.append(point)
     return points
 
@@ -289,4 +307,4 @@ def test():
     hCluster(points, Cluster.averageLinkageDist, 10, False)
     hCluster(points, Cluster.singleLinkageDist, 10, False)
 
-test()
+# test()
